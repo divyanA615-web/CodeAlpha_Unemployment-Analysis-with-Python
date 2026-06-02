@@ -129,6 +129,7 @@ fig, ax = plt.subplots(figsize=(14,4)) # type: ignore
 ax.fill_between(lpr_monthly['Date'], lpr_monthly['LPR'],alpha=0.4, color='#9C27B0') # type: ignore
 ax.plot(lpr_monthly['Date'], lpr_monthly['LPR'], color='#6A1B9A',linewidth=2,label='Avg LPR(%)') # type: ignore
 ax.axvspan(covid_lockdown_start, covid_lockdown_end, alpha=0.15, color='red', label='COVID Lockdown Period') # type: ignore
+ax.set_title('👷 Labour Practicipation Rate Over Time', fontsize=14, fontweight='bold') # type: ignore
 ax.set_xlabel('Month') # type: ignore
 ax.set_ylabel('LRP (%)') # type: ignore
 ax.legend() # type: ignore
@@ -137,3 +138,29 @@ plt.xticks(rotation=30) # type: ignore
 plt.savefig('unemp_lpr_trend.png', dpi=150, bbox_inches='tight') # type: ignore
 plt.close()
 print("✅ Saved:'unemp_lpr_trend.png'")
+
+# --- 8. Chart 6 - COVID Pre vs During Unemployment Comparision ---
+pre_covid  = u1[u1['Date'] < covid_lockdown_start]['UnempRate'].mean()
+dur_covid  = u1[(u1['Date'] >= covid_lockdown_start) & (u1['Date'] <= covid_lockdown_end)]['UnempRate'].mean()
+post_covid = u1[u1['Date'] > covid_lockdown_end]['UnempRate'].mean()
+
+phases =['Pre-COVID\n(May 2019 - Feb 2020)',
+         'During Lockdown\n(March - june 2020)',
+         'post-Lackdown\n(Jul - Dec 2020)']
+values =[pre_covid, dur_covid, post_covid]
+bar_colors = ['#4CAF50','#F44336','#FF9800']
+
+fig, ax =plt.subplots(figsize=(9,5)) # type: ignore
+bars = ax.bar(phases, values, color=bar_colors, edgecolor='white',linewidth=1.5, width=0.55) # type: ignore
+for bar, val in zip(bars, values): # type: ignore
+    ax.text(bar.get_x() + bar.get_width()/2, # type: ignore
+            bar.get_height() + 0.3, f'{val:.1f}%', # type: ignore
+            ha='center', fontsize=12, fontweight='bold')
+ax.set_title('⚡ COVID-19 Impact: Unemployment Rate by Phase', fontsize=14, fontweight='bold') # type: ignore
+ax.set_ylabel('Average Unemployment Rate (%)', fontsize=11) # type: ignore
+ax.set_ylim(0, max(values) * 1.25)
+ax.grid(axis='y', alpha=0.3) # type: ignore
+plt.tight_layout()
+plt.savefig('unemp_covid_impact.png', dpi=150, bbox_inches='tight') # type: ignore
+plt.close()
+print("✅ Saved:'unemp_covid_impact.png' ")
