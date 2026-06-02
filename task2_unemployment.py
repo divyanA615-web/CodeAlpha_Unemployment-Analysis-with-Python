@@ -90,7 +90,7 @@ plt.savefig('unemp_rural_urban.png', dpi=150, bbox_inches='tight') # type: ignor
 plt.close()
 print("✅ Saved: 'unemp_rural_urban.png'")
 
-#--5. Chart 3: State-wise Average Unemployment (Bar chart)--
+#-- 5. Chart 3: State-wise Average Unemployment (Bar chart) --
 state_avg = u1.groupby('Region')['UnempRate'].mean().sort_values(ascending=True)
 fig, ax = plt.subplots(figsize=(12, 9)) # type: ignore
 colors_bar = ['#EF5350' if v > state_avg.mean() else '#42A5F5' for v in state_avg.values] # type: ignore
@@ -106,7 +106,7 @@ plt.savefig('unemp_state_wise.png', dpi=150, bbox_inches='tight') # type: ignore
 plt.close()
 print("✅ Saved: 'unemp_state_wise.png'")
 
-# --6. Chaet 4- Covid Impact Heatmap--
+# -- 6. Chaet 4- Covid Impact Heatmap --
 # Use U2 which covers Jan-Nov 2020 with geo groups
 u2_monthly =u2.groupby(['Date', 'RegionGroup'])['UnempRate'].mean().unstack()
 fig, ax = plt.subplots(figsize=(16, 8)) # type: ignore
@@ -122,3 +122,18 @@ plt.tight_layout()
 plt.savefig('unemp_heatmap_state_month.png', dpi=150, bbox_inches='tight') # type: ignore
 plt.close()
 print("✅ Save: 'unemp_heatmap_state_month.png'")
+
+# --- 7.Chart 5 -Labour Participation Rate (LPR) Trends ---
+lpr_monthly = u1.groupby('Date')['LPR'].mean().reset_index()
+fig, ax = plt.subplots(figsize=(14,4)) # type: ignore
+ax.fill_between(lpr_monthly['Date'], lpr_monthly['LPR'],alpha=0.4, color='#9C27B0') # type: ignore
+ax.plot(lpr_monthly['Date'], lpr_monthly['LPR'], color='#6A1B9A',linewidth=2,label='Avg LPR(%)') # type: ignore
+ax.axvspan(covid_lockdown_start, covid_lockdown_end, alpha=0.15, color='red', label='COVID Lockdown Period') # type: ignore
+ax.set_xlabel('Month') # type: ignore
+ax.set_ylabel('LRP (%)') # type: ignore
+ax.legend() # type: ignore
+ax.grid(alpha=0.3) # type: ignore
+plt.xticks(rotation=30) # type: ignore
+plt.savefig('unemp_lpr_trend.png', dpi=150, bbox_inches='tight') # type: ignore
+plt.close()
+print("✅ Saved:'unemp_lpr_trend.png'")
