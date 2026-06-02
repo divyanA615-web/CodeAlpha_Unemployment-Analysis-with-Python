@@ -69,3 +69,23 @@ plt.tight_layout()
 plt.savefig('unemp_national_trends.png', dpi=150, bbox_inches='tight') # type: ignore
 plt.close()
 print("✅ Saved: 'unemp_national_trends.png'")
+
+# --- 4. Chart 2: Rural vs Urban Unemployment ---
+area_monthly = u1.groupby(['Date', 'Area'])['UnempRate'].mean().reset_index()
+rural = area_monthly[area_monthly['Area'] == 'Rural']
+urban = area_monthly[area_monthly['Area'] == 'Urban']
+
+fig, ax = plt.subplots(figsize=(14, 5)) # type: ignore
+ax.plot(rural['Date'], rural['UnempRate'], color='#4CAF50', linewidth=2.5, marker='s', markersize=5, label='Rural') # type: ignore
+ax.plot(urban['Date'], urban['UnempRate'], color='#FF5722', linewidth=2.5, marker='^', markersize=5, label='Urban') # type: ignore
+ax.axvspan(covid_lockdown_start, covid_lockdown_end, alpha=0.15, color='red', label='COVID-19 Lockdown ') # type: ignore
+ax.set_title('🏘️ Rural vs Urban Unemployment Rate', fontsize=14, fontweight='bold') # type: ignore
+ax.set_xlabel('Month', fontsize=11) # type: ignore
+ax.set_ylabel('Unemployment Rate (%)', fontsize=11) # type: ignore
+ax.legend(fontsize=11) # type: ignore
+ax.grid(alpha=0.3) # type: ignore
+plt.xticks(rotation=30) # type: ignore
+plt.tight_layout()
+plt.savefig('unemp_rural_urban.png', dpi=150, bbox_inches='tight') # type: ignore
+plt.close()
+print("✅ Saved: 'unemp_rural_urban.png'")
