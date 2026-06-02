@@ -49,3 +49,23 @@ print(u2[['Region','Date','UnempRate','RegionGroup']].head(4))
 # --- 2. NATIONAL MONTHLY AVERAGE ---
 national= u1.groupby('Date')['UnempRate'].mean().reset_index()
 national.columns = ['Date', 'AvgUnempRate']
+
+# --- 3. Chart 1: National Unemployment Trends ---
+fig, ax = plt.subplots(figsize=(14, 5)) # type: ignore
+ax.plot(national['Date'], national['AvgUnempRate'], color='#2196F3', linewidth=2.5 , marker='o', markersize=5, label='Avg Unemployment Rate') # type: ignore
+
+# Shade COVID lockdown period 
+covid_lockdown_start = pd.Timestamp('2020-03-01')
+covid_lockdown_end = pd.Timestamp('2020-06-30')
+ax.axvspan(covid_lockdown_start, covid_lockdown_end, alpha=0.18, color='red', label='COVID-19 Lockdown Period') # type: ignore
+ax.axhline(national['AvgUnempRate'].mean(), color='orange', linestyle='--', linewidth=1.5, label=f'Mean: {national["AvgUnempRate"].mean():.1f}%') # type: ignore
+ax.set_title('📈 National Unemployment Rate Trends (2019-2020)', fontsize=14, fontweight='bold') # type: ignore
+ax.set_xlabel('Month', fontsize=11) # type: ignore
+ax.set_ylabel('Unemployment Rate (%)', fontsize=11) # type: ignore
+ax.legend(fontsize=10) # type: ignore
+ax.grid(alpha=0.3) # type: ignore
+plt.xticks(rotation=30) # type: ignore
+plt.tight_layout()
+plt.savefig('unemp_national_trends.png', dpi=150, bbox_inches='tight') # type: ignore
+plt.close()
+print("✅ Saved: 'unemp_national_trends.png'")
