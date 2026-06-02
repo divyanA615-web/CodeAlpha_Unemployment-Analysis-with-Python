@@ -89,3 +89,19 @@ plt.tight_layout()
 plt.savefig('unemp_rural_urban.png', dpi=150, bbox_inches='tight') # type: ignore
 plt.close()
 print("✅ Saved: 'unemp_rural_urban.png'")
+
+#--5. Chart 3: State-wise Average Unemployment (Bar chart)--
+state_avg = u1.groupby('Region')['UnempRate'].mean().sort_values(ascending=True)
+fig, ax = plt.subplots(figsize=(12, 9)) # type: ignore
+colors_bar = ['#EF5350' if v > state_avg.mean() else '#42A5F5' for v in state_avg.values] # type: ignore
+state_avg.plot(kind='barh', ax=ax, color=colors_bar, edgecolor='white', linewidth=0.5) # type: ignore
+ax.set_title('📊 State-wise Average Unemployment Rate', fontsize=14, fontweight='bold') # type: ignore
+ax.set_xlabel('Average Unemployment Rate (%)', fontsize=11) # type: ignore
+high_patch = mpatches.Patch(color='#EF5350', label='Above National Average') # type: ignore
+low_patch = mpatches.Patch(color='#42A5F5', label='Below National Average') 
+ax.legend(handles=[high_patch, low_patch], fontsize=10) # type: ignore
+ax.grid(axis='x', alpha=0.3) # type: ignore
+plt.tight_layout()
+plt.savefig('unemp_state_wise.png', dpi=150, bbox_inches='tight') # type: ignore
+plt.close()
+print("✅ Saved: 'unemp_state_wise.png'")
