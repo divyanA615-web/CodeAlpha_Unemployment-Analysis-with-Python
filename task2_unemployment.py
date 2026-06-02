@@ -45,3 +45,7 @@ print(u1[['Region','Date','UnempRate','Area']].head(4))
 print("\n== DATASET 2 (Unemployment_Rate_upto_11_2020) ==")
 print(f"Shape: {u2.shape} | Date Range: {u2['Date'].min().date()} to {u2['Date'].max().date()}")
 print(u2[['Region','Date','UnempRate','RegionGroup']].head(4))
+
+# --- 2. NATIONAL MONTHLY AVERAGE ---
+national= u1.groupby('Date')['UnempRate'].mean().reset_index()
+national.columns = ['Date', 'AvgUnempRate']
