@@ -105,3 +105,20 @@ plt.tight_layout()
 plt.savefig('unemp_state_wise.png', dpi=150, bbox_inches='tight') # type: ignore
 plt.close()
 print("✅ Saved: 'unemp_state_wise.png'")
+
+# --6. Chaet 4- Covid Impact Heatmap--
+# Use U2 which covers Jan-Nov 2020 with geo groups
+u2_monthly =u2.groupby(['Date', 'RegionGroup'])['UnempRate'].mean().unstack()
+fig, ax = plt.subplots(figsize=(16, 8)) # type: ignore
+sns.heatmap(u2_monthly.T, cmap='YlOrRd', linewidths=0.3, annot=False, ax=ax, cbar_kws={'label': 'Unemployment Rate (%)'}) # type: ignore
+ax.set_title('🗺️ State x Month Unemployment Heatmap (Jan-Nov 2020)', fontsize=14, fontweight='bold') # type: ignore
+ax.set_xlabel('Month', fontsize=11) # type: ignore
+ax.set_ylabel('State', fontsize=11) # type: ignore
+
+#Mark Covid months
+month_labels = [d.strftime('%b-%y') for d in u2_monthly.index]
+ax.set_xticklabels(month_labels, rotation=45, ha='right',fontsize=9) # type: ignore
+plt.tight_layout()
+plt.savefig('unemp_heatmap_state_month.png', dpi=150, bbox_inches='tight') # type: ignore
+plt.close()
+print("✅ Save: 'unemp_heatmap_state_month.png'")
